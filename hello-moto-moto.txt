@@ -1,1 +1,15 @@
 Hello how are you doing this fine day of ours. 
+So there will be plan of attack for this here:
+-CHessboard & updating.
+2d array x and y board[][]16 16
+object called peice,
+those objects are stored into the board.
+1-15
+|
+15
+move peice (type, )
+update peice
+
+char board[16][16];
+
+draw grid, prints out the grid, at each space it checks the array to see if there is something there. 
