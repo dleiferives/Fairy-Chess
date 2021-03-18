@@ -12,6 +12,7 @@ int main()
   
   while( true ) 
   {
+    new_board.move_piece(0,{8,8});
     if( new_board.update_board() != true)
     {
      break;

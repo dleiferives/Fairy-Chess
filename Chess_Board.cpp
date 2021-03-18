@@ -41,6 +41,7 @@ void Chess_Board::populate_board(int a, int b)// fills up the board based on the
   size_t len = 16; // sixteen we dont want the newline
   
   int iterator =0;
+  int iterator2 =0;
   while ((getline(&line, &len, fp)) != -1) 
   {  
     for( int i =0; i<b; i++)
@@ -49,11 +50,48 @@ void Chess_Board::populate_board(int a, int b)// fills up the board based on the
       {
         break;
       }
-      board[iterator][i].character = line[i]; // so this calls the golbal variable board, its messy but it works
+      board[iterator][i].character = line[i]; //This no longer is a global variablewe are good my thadd. 
+      if(line[i] != '.')
+      {
+        if(iterator2 < 64)
+	{
+	  board[iterator][i].g_ID = iterator2; // we are declaring each of the peices to their sides now, Im sure that for switching white and black we can just make the sides of the array they are stored to change.
+	  board[iterator][i].pos = {i,iterator};
+	  sides[0][iterator2] = board[iterator][i];
+	}
+	else
+	{
+          board[iterator][i].g_ID = iterator2;
+	  board[iterator][i].pos = {i,iterator};
+          sides[1][iterator2-64] = board[iterator][i];
+	}
+        iterator2++;
+      }
     
     }
     iterator++;
   }
   fclose(fp);
   
+}
+// this is going to be a big momma milker of a function... so the groundwork is laid out now, need to actually write the restrictions now.
+bool Chess_Board::move_piece(int g_ID, pos future)
+{
+  bool side;
+  // first pin down the piece
+  side = (g_ID < 64) ? 0 : 1;
+  pos current = sides[side][g_ID - (side*64)].pos; 
+  // check if the move is possible.... not doing that yet
+  // add character to where it wants to go
+  board[future.y][future.x] = sides[side][g_ID - (side*64)];
+  // change character in old position to an empty one.	
+  board[current.y][current.x].character = '.'; // resets the character to an empty one
+  board[current.y][current.x].g_ID = 404; // resets the g_ID so that it does not error on finding the proper position.
+  sides[side][g_ID - (side*64)].pos = future; 
+  return side;
+}
+
+int Chess_Board::get_gID(pos check_pos)
+{
+  return board[check_pos.y][check_pos.x].g_ID;
 }
