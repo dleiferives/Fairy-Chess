@@ -95,3 +95,163 @@ int Chess_Board::get_gID(pos check_pos)
 {
   return board[check_pos.y][check_pos.x].g_ID;
 }
+
+//so I think that for the rest of this movment code how it will work is that for each piece it will calculate all of the possible moves that can be made when a move is requested, and if the move falls within one of those it will execute the move.
+/*
+ *
+ *potential squares are labed with a pound sign and take squares are with a % sign
+ *
+ *	
+ * . . . . . . . . . . 	
+ * . . . . . i . . . . 
+ * . . . . % # % . . . 
+ * . . . . . # . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * checks, #1 line 4 can move 2 down or up, first have to detrmine way of movement. 
+ *
+ *so if the thing is positive then we normally go negative and then multiply with a negative. 
+ *that means we can determine which way something moves (vertically with) n += 1 + (side* (-2));
+ *
+ *tries to move to 
+bool move_pawn(int g_ID, pos current, pos future, bool side)
+{
+  int v_it += 1 + (side* (-2)); // the vertical iterator    
+  if(get_gID(future) != 404) // aka if this is a piece
+  {
+    if(({current.x + 1,current.y + v_it} || {current.x - 1, current.y + v_it}) == future)
+    {
+      return true; // will eventually have to check for check, but I really dont know how to do that in this moment, will be implemented when i figure this out more.
+    }
+    else
+    {
+      return false;
+    }
+  }
+  else
+  {
+    int pawn_line = (side == 0) ? 3 : 12;
+    bool pawn_line_bool = 0;
+    if( pawn_line == current.y){pawn_line_bool = 1;}
+    if((current.x == future.x) && (current.y == (future.y - v_it)|| ((pawn_line_bool == 1) && (current.y == future.y - (2*v_it)))))
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+
+}
+ * . . . . . . . . . . 	
+ * . . . . . . . . . . 
+ * . . . . . . . . . . 
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ *
+ *
+ * . . . . . . . . . . 	
+ * . . . . . . . . . . 
+ * . . . . . . . . . . 
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ *
+ *
+ *
+ * . . . . . . . . . . 	
+ * . . . . . . . . . . 
+ * . . . . . . . . . . 
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ *
+ *
+ *
+ * . . . . . . . . . . 	
+ * . . . . . . . . . . 
+ * . . . . . . . . . . 
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ *
+ *
+ *
+ * . . . . . . . . . . 	
+ * . . . . . . . . . . 
+ * . . . . . . . . . . 
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ *
+ *
+ *
+ *
+ * . . . . . . . . . . 	
+ * . . . . . . . . . . 
+ * . . . . . . . . . . 
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ *
+ *
+ *
+ *
+ * . . . . . . . . . . 	
+ * . . . . . . . . . . 
+ * . . . . . . . . . . 
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ * . . . . . . . . . .
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * /
