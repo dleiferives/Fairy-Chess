@@ -17,13 +17,13 @@ struct piece // defining piece
   int y;
   char type;
   // might replace with a bit field, not sure yet though
-  int g_id;
-  s_ptrp ptr; // self referencing pointer
+  unsigned int g_id: 16; // declaring a sixteen bit int 
   // using a bit field to more effectively manage memory, it will do nothing special, but it is good practice 
+  unsigned int side: 1; // 0 for white 1 for black as white goes first
   unsigned int slide_diagonal : 1;
   unsigned int slide_ortho : 1;
   unsigned int jump : 1;
-  
+  s_ptrp ptr; // self referencing pointer
 };
 
 struct board // defining board
@@ -87,53 +87,54 @@ int check_move(s_ptrb board, piece p, int p2x, int p2y)
    printf("x:%i  y:%i  bl:%i  tl:%i  tr:%i  br:%i\n width:%i  height:%i", p.x, p.y, bl, tl, tr, br, board->width, board->height);
    if(0 < ((p2y-p.y)*(p2x - p.x)))
    {
-    for(int i =0; i <tl; i++) // down left
+    for(int i =0; i <tl; i++) // positive slope
     {
-      //testing
-      board->tiles[((p.y - (i+1))*board->width) +p.x -(i+1)].type = '#';
-      //testing end
+      if( (board->tiles[(board->width * p.y -(i+1)) + (p.x - (i+1))].side != p.side)  ) return 0;
+      
+      if( (board->tiles[(board->width * p.y -(i+1)) + (p.x - (i+1))].g_id != 0) )
+      {
+        if( (p2x == (p.x - (i+1))) && ( p2y == (p.y -(i+1))) )
+        {
+          return 1;
+        }
+        else
+        {
+          return 0;
+        }
+      }
+      
       if( (p2x == (p.x - (i+1))) && ( p2y == (p.y -(i+1))) )
       {
-      //  return 1;
+        return 1;
       }
     }
     for(int i =0; i < br; i++)
     {
-      board->tiles[((p.y + (i+1))*board->width) +p.x +(i+1)].type = '#';
-
       if( (p2x == (p.x + (i+1))) && (p2y == (p.y + (i+1))) )
       {
-        //return 1;
+        return 1;
       }
     }
-   //}
-  // else
-   //{
+   }
+   else
+   {
 
-    for(int i =0; i <bl; i++) // down left
+    for(int i =0; i <bl; i++) // negative slope
     {
-      //testing
-      board->tiles[((p.y + (i+1))*board->width) +p.x -(i+1)].type = '#';
-      //testing end
       if( (p2x == (p.x - (i+1))) && ( p2y == (p.y +(i+1))) )
       {
-      //  return 1;
+        return 1;
       }
     }
     for(int i =0; i < tr; i++)
     {
-      board->tiles[((p.y - (i+1))*board->width) +p.x +(i+1)].type = '#';
 
       if( (p2x == (p.x + (i+1))) && (p2y == (p.y - (i+1))) )
       {
-        //return 1;
+        return 1;
       }
     }
    }
-
-
-
-
  }
  return 0;
 }
