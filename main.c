@@ -96,15 +96,12 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
  {
    for(int i =1; i <= up; i++)
    {
-     puts("up");
      if(take_last ==1)
      {
-       puts("test");
        if(board->tiles[(board->width * (y-(i))) + (x+0)].g_id == 0) continue;
        if(board->tiles[(board->width * (y-(i))) + (x+0)].side != side)
        {
         result[pointer_pos] = ((board->width *(y-(i) )) + (x+0)) + 1;
-          printf("\ntake last %i %i %i %i", (x+0), y-(i), board->width*(y-(i)) + (x+0), result[pointer_pos]);
         pointer_pos++;
         break;
        }
@@ -118,7 +115,6 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
       if(board->tiles[(board->width * y-(i)) + (x+0)].g_id == 0)// if empty add to possible moves
       {
         result[pointer_pos] = ((board->width *(y-(i))) + (x+0)) + 1;
-          printf("\nempty: %i %i %i %i", (x+0), y-(i), board->width*(y-(i)) + (x+0), result[pointer_pos]);
         pointer_pos++;
         continue;
       
@@ -136,10 +132,8 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
              for(int j =0; j < meta_len; j++)
              {
                result[pointer_pos+j] = copy_array[j];
-               printf("\ncopy_array: %i", copy_array[j]);
 
              }
-          printf("\ndsfds %i %i %i %i %i", (x+0), y-(i), board->width*(y-(i)) + (x+0), result[pointer_pos], meta_len);
              pointer_pos += meta_len;
            }
            if(j_no_take == 2)
@@ -155,7 +149,6 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
            if(board->tiles[(board->width * y-(i)) + (x+0)].side != side)
            {
              result[pointer_pos] = ((board->width *(y-(i))) + (x+0)) + 1;
-             printf("\ntaking: %i %i %i %i", (x+0), y-(i), board->width*(y-(i)) + (x+0), result[pointer_pos]);
              pointer_pos++;
              break;
            }
@@ -172,15 +165,12 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
  {
    for(int i =1; i < right; i++)
    {
-     puts("right");
      if(take_last ==1)
      {
-       puts("test");
        if(board->tiles[(board->width * (y )) + (x+i)].g_id == 0) continue;
        if(board->tiles[(board->width * (y )) + (x+i)].side != side)
        {
         result[pointer_pos] = ((board->width *(y )) + (x+i)) + 1;
-          printf("\n %i %i %i %i", (x+i), y, board->width*(y) + (x+i), result[pointer_pos]);
         pointer_pos++;
         break;
        }
@@ -194,7 +184,6 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
       if(board->tiles[(board->width * y) + (x+i)].g_id == 0)// if empty add to possible moves
       {
         result[pointer_pos] = ((board->width *(y)) + (x+i)) + 1;
-          printf("\n %i %i %i %i", (x+i), y, board->width*(y) + (x+i), result[pointer_pos]);
         pointer_pos++;
         continue;
       
@@ -212,10 +201,8 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
              for(int j =0; j < meta_len; j++)
              {
                result[pointer_pos+j] = copy_array[j];
-               printf("\ncopy_array: %i", copy_array[j]);
 
              }
-          printf("\ndsfds %i %i %i %i %i", (x+i), y, board->width*(y) + (x+i), result[pointer_pos], meta_len);
              pointer_pos += meta_len;
            }
            if(j_no_take == 2)
@@ -231,7 +218,6 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
            if(board->tiles[(board->width * y) + (x+i)].side != side)
            {
              result[pointer_pos] = ((board->width *(y)) + (x+i)) + 1;
-             printf("\n %i %i %i %i", (x+i), y, board->width*(y) + (x+i), result[pointer_pos]);
              pointer_pos++;
              break;
            }
@@ -247,18 +233,14 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
 
  if( (direction == 4) || (direction == 0))// going left
  {
-   printf("LEFT %i", left);
    for(int i =1; i <= left; i++)
    {
-     puts("left");
      if(take_last ==1)
      {
-       puts("test");
        if(board->tiles[(board->width * (y )) + (x-i)].g_id == 0) continue;
        if(board->tiles[(board->width * (y )) + (x-i)].side != side)
        {
         result[pointer_pos] = ((board->width *(y )) + (x-i)) + 1;
-          printf("\n %i %i %i %i", (x-i), y, board->width*(y) + (x-i), result[pointer_pos]);
         pointer_pos++;
         break;
        }
@@ -272,7 +254,6 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
       if(board->tiles[(board->width * y) + (x-i)].g_id == 0)// if empty add to possible moves
       {
         result[pointer_pos] = ((board->width *(y)) + (x-i)) + 1;
-          printf("\n %i %i %i %i", (x-i), y, board->width*(y) + (x-i), result[pointer_pos]);
         pointer_pos++;
         continue;
       
@@ -290,10 +271,8 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
              for(int j =0; j < meta_len; j++)
              {
                result[pointer_pos+j] = copy_array[j];
-               printf("\ncopy_array: %i", copy_array[j]);
 
              }
-          printf("\ndsfds %i %i %i %i %i", (x-i), y, board->width*(y) + (x-i), result[pointer_pos], meta_len);
              pointer_pos += meta_len;
            }
            if(j_no_take == 2)
@@ -309,7 +288,6 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
            if(board->tiles[(board->width * y) + (x-i)].side != side)
            {
              result[pointer_pos] = ((board->width *(y)) + (x-i)) + 1;
-             printf("\n %i %i %i %i", (x-i), y, board->width*(y) + (x-i), result[pointer_pos]);
              pointer_pos++;
              break;
            }
@@ -333,16 +311,12 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
 
    for(int i =1; i <= down; i++)
    {
-     puts("down");
-     printf("\nDOWN %i %i %i", down, take_last, board->tiles[40].g_id);
      if(take_last ==1)
      {
-       puts("test");
        if(board->tiles[(board->width * (y+(i))) + (x+0)].g_id == 0) continue;
        if(board->tiles[(board->width * (y+(i))) + (x+0)].side != side)
        {
         result[pointer_pos] = ((board->width *(y+(i) )) + (x+0)) + 1;
-          printf("\ntake last %i %i %i %i", (x+0), y+(i), board->width*(y+(i)) + (x+0), result[pointer_pos]);
         pointer_pos++;
         break;
        }
@@ -353,11 +327,9 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
      }
      else // normal piece movment
      {
-          printf("\nnot jumping: %i %i %i %i %i", (x+0), y+(i), board->width*(y+(i)) + (x+0), result[pointer_pos], board->tiles[(board->width * y+(i)) + (x+0)].g_id );
       if(board->tiles[(board->width * (y+(i))) + (x+0)].g_id == 0)// if empty add to possible moves
       {
         result[pointer_pos] = ((board->width *(y+(i))) + (x+0)) + 1;
-          printf("\nempty: %i %i %i %i", (x+0), y+(i), board->width*(y+(i)) + (x+0), result[pointer_pos]);
         pointer_pos++;
         continue;
       
@@ -375,10 +347,8 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
              for(int j =0; j < meta_len; j++)
              {
                result[pointer_pos+j] = copy_array[j];
-               printf("\ncopy_array: %i", copy_array[j]);
 
              }
-          printf("\ndown dsfds %i %i %i %i %i", (x+0), y+(i), board->width*(y+(i)) + (x+0), result[pointer_pos], meta_len);
              pointer_pos += meta_len;
            }
            if(j_no_take == 2)
@@ -394,7 +364,6 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
            if(board->tiles[(board->width * y+(i)) + (x+0)].side != side)
            {
              result[pointer_pos] = ((board->width *(y+(i))) + (x+0)) + 1;
-             printf("\ntaking: %i %i %i %i", (x+0), y+(i), board->width*(y+(i)) + (x+0), result[pointer_pos]);
              pointer_pos++;
              break;
            }
@@ -428,7 +397,7 @@ int *generate_moves(s_ptrb board, piece p)
 
 
 
-int check_move(s_ptrb board, piece p, int pos)
+int check_move(s_ptrb board, piece p, int pos, int t_pos)
 {
  if(p.slide_ortho == 1)
  {
@@ -437,15 +406,42 @@ int check_move(s_ptrb board, piece p, int pos)
   for( int i =0; i < len; i++)
   {
     if(array[i] == 0) continue;
-    printf("\n %i %i", array[i]-1, i);
-    board->tiles[array[i]-1].type = '#';
+   // printf("\n %i %i", array[i]-1, i); // can be used to print out the positions stuff tries to move t0
+    //board->tiles[array[i]-1].type = '#';
+    if(t_pos == array[i]-1)
+    {
+      move_piece(board, pos, t_pos); 
+      puts("pogchamp");
+      return 1;
+    }
   }
  }
  return 0;
 }
 
-int move_piece()
+int move_piece(s_ptrb board, int pos_init, int pos_final)
 {
+  piece final = board->tiles[pos_final];
+  piece init = board->tiles[pos_init];
+  piece empty = {init.x, init.y, '.', 0,0,0,0,0,0,0};
+
+  printf("\n %c,%c,%c", board->tiles[pos_final].type, board->tiles[pos_init].type,empty.type);
+
+  final.type = init.type;
+  final.g_id = init.g_id;
+  final.side = init.side;
+  final.slide_diagonal = init.slide_diagonal;
+  final.slide_ortho = init.slide_ortho;
+  final.jump = init.jump;
+  final.shooter_diagonal = init.shooter_diagonal;
+  final.shooter_ortho = init.shooter_ortho;
+  
+  board->tiles[pos_init] = empty;
+  board->tiles[pos_final] = final;
+
+  printf("\n %c,%c,%c", board->tiles[pos_final].type, board->tiles[pos_init].type,empty.type);
+  return 1;
+
 
 }
 
@@ -469,7 +465,8 @@ int main()
   board.tiles[26].side = 1;
   board.tiles[26].g_id = 2;
 
-  printf(" %i \n", check_move(&board, board.tiles[21], 21));
+  put_board(board.tiles, board.width, board.height);
+  printf(" %i \n", check_move(&board, board.tiles[21], 21, 26));
 
   put_board(board.tiles, board.width, board.height);
 
