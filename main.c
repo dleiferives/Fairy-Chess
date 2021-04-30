@@ -85,6 +85,9 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
  int down = board->height - y;
  int left = x;
  int right = board->width - x;
+need to fix the direction array 
+ int *direction_arr = {up,down,left,right}; 
+ 
  len[0] = (take_last == 1) ? 4 : (up+down+left+right);
  len[0] += (j_no_take == 0) ? 0 : 16;
  
@@ -92,16 +95,38 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
 
  int *result = (int *) malloc(len[0] * sizeof(int));
 
- if( (direction == 1) || (direction == 0))
+
+int start;
+int end;
+if(direction ==0)
+{
+  start =1;
+  end =4;
+}
+else
+{
+
+}
+
+
+
+ for(int v_direction =start; v_direction <= end; v_direction++)
  {
-   for(int i =1; i <= up; i++)
+   int v_m = !(v_direction > 2);
+   int v_n = !(v_m);
+   int v_o = 1-(2*(direction %2));
+
+   for(int i =1; i <= direction_arr[v_direction-1]; i++)
    {
+     int m =v_m*i*v_o;
+     int n =v_n*i*v_o;
      if(take_last ==1)
      {
-       if(board->tiles[(board->width * (y-(i))) + (x+0)].g_id == 0) continue;
-       if(board->tiles[(board->width * (y-(i))) + (x+0)].side != side)
+
+       if(board->tiles[(board->width * (y+(m))) + (x+(n))].g_id == 0) continue;
+       if(board->tiles[(board->width * (y+(m))) + (x+(n))].side != side)
        {
-        result[pointer_pos] = ((board->width *(y-(i) )) + (x+0)) + 1;
+        result[pointer_pos] = ((board->width *(y+(m) )) + (x+(n))) + 1;
         pointer_pos++;
         break;
        }
@@ -112,9 +137,9 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
      }
      else // normal piece movment
      {
-      if(board->tiles[(board->width * y-(i)) + (x+0)].g_id == 0)// if empty add to possible moves
+      if(board->tiles[(board->width * (y+(m))) + (x+(n))].g_id == 0)// if empty add to possible moves
       {
-        result[pointer_pos] = ((board->width *(y-(i))) + (x+0)) + 1;
+        result[pointer_pos] = ((board->width *(y+(m))) + (x+(n))) + 1;
         pointer_pos++;
         continue;
       
@@ -128,7 +153,7 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
            {
 //             *result[pointer_pos] = slide_ortho(board, x, y-(i+1), side, 1, 0, 1, &meta_len); // getting cannon pos up
              int * copy_array = (int *) malloc(10*sizeof(int));
-               copy_array = slide_ortho(board, (x+0) , y-(i), side , 1, 0, 1, &meta_len); 
+               copy_array = slide_ortho(board, (x+(n)) , y+(m), side , 1, 0, v_direction, &meta_len); 
              for(int j =0; j < meta_len; j++)
              {
                result[pointer_pos+j] = copy_array[j];
@@ -146,224 +171,9 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
          else
          {
            // not a cannon or something cannon like
-           if(board->tiles[(board->width * y-(i)) + (x+0)].side != side)
+           if(board->tiles[(board->width * y+(m)) + (x+(n))].side != side)
            {
-             result[pointer_pos] = ((board->width *(y-(i))) + (x+0)) + 1;
-             pointer_pos++;
-             break;
-           }
-           else // don't take same sides peice
-           {
-           }
-         }
-       }
-     }
-   }
- }
-
- if( (direction == 2) || (direction == 0))
- {
-   for(int i =1; i < right; i++)
-   {
-     if(take_last ==1)
-     {
-       if(board->tiles[(board->width * (y )) + (x+i)].g_id == 0) continue;
-       if(board->tiles[(board->width * (y )) + (x+i)].side != side)
-       {
-        result[pointer_pos] = ((board->width *(y )) + (x+i)) + 1;
-        pointer_pos++;
-        break;
-       }
-       else
-       {
-         break;
-       }
-     }
-     else // normal piece movment
-     {
-      if(board->tiles[(board->width * y) + (x+i)].g_id == 0)// if empty add to possible moves
-      {
-        result[pointer_pos] = ((board->width *(y)) + (x+i)) + 1;
-        pointer_pos++;
-        continue;
-      
-      }
-      else
-      {
-        if((j_no_take !=0) )
-        {
-           int meta_len =0;
-           if(j_no_take == 1)
-           {
-//             *result[pointer_pos] = slide_ortho(board, x, y-(i+1), side, 1, 0, 1, &meta_len); // getting cannon pos up
-             int * copy_array = (int *) malloc(10*sizeof(int));
-               copy_array = slide_ortho(board, (x+i) , y, side , 1, 0, 2, &meta_len); 
-             for(int j =0; j < meta_len; j++)
-             {
-               result[pointer_pos+j] = copy_array[j];
-
-             }
-             pointer_pos += meta_len;
-           }
-           if(j_no_take == 2)
-           {
-             //for the diagonal checks... i dont think any pieces actually do that, however, if they do, wouldent that be cool.
-           }
-           break;
- 
-         }
-         else
-         {
-           // not a cannon or something cannon like
-           if(board->tiles[(board->width * y) + (x+i)].side != side)
-           {
-             result[pointer_pos] = ((board->width *(y)) + (x+i)) + 1;
-             pointer_pos++;
-             break;
-           }
-           else // don't take same sides peice
-           {
-           }
-         }
-       }
-     }
-   }
- }
-
-
- if( (direction == 4) || (direction == 0))// going left
- {
-   for(int i =1; i <= left; i++)
-   {
-     if(take_last ==1)
-     {
-       if(board->tiles[(board->width * (y )) + (x-i)].g_id == 0) continue;
-       if(board->tiles[(board->width * (y )) + (x-i)].side != side)
-       {
-        result[pointer_pos] = ((board->width *(y )) + (x-i)) + 1;
-        pointer_pos++;
-        break;
-       }
-       else
-       {
-         break;
-       }
-     }
-     else // normal piece movment
-     {
-      if(board->tiles[(board->width * y) + (x-i)].g_id == 0)// if empty add to possible moves
-      {
-        result[pointer_pos] = ((board->width *(y)) + (x-i)) + 1;
-        pointer_pos++;
-        continue;
-      
-      }
-      else
-      {
-        if((j_no_take !=0) )
-        {
-           int meta_len =0;
-           if(j_no_take == 1)
-           {
-//             *result[pointer_pos] = slide_ortho(board, x, y-(i+1), side, 1, 0, 1, &meta_len); // getting cannon pos up
-             int * copy_array = (int *) malloc(10*sizeof(int));
-               copy_array = slide_ortho(board, (x-i) , y, side , 1, 0, 4, &meta_len); 
-             for(int j =0; j < meta_len; j++)
-             {
-               result[pointer_pos+j] = copy_array[j];
-
-             }
-             pointer_pos += meta_len;
-           }
-           if(j_no_take == 2)
-           {
-             //for the diagonal checks... i dont think any pieces actually do that, however, if they do, wouldent that be cool.
-           }
-           break;
- 
-         }
-         else
-         {
-           // not a cannon or something cannon like
-           if(board->tiles[(board->width * y) + (x-i)].side != side)
-           {
-             result[pointer_pos] = ((board->width *(y)) + (x-i)) + 1;
-             pointer_pos++;
-             break;
-           }
-           else // don't take same sides peice
-           {
-            // result[pointer_pos] = 0;
-            // printf("\n %i %i %i %i", (x+i), y, board->width*(y) + (x+i), result[pointer_pos]);
-            // pointer_pos++;
-            // break;
-           }
-         }
-       }
-     }
-   }
- }
-
-
-
- if( (direction == 3) || (direction == 0))
- {
-
-   for(int i =1; i <= down; i++)
-   {
-     if(take_last ==1)
-     {
-       if(board->tiles[(board->width * (y+(i))) + (x+0)].g_id == 0) continue;
-       if(board->tiles[(board->width * (y+(i))) + (x+0)].side != side)
-       {
-        result[pointer_pos] = ((board->width *(y+(i) )) + (x+0)) + 1;
-        pointer_pos++;
-        break;
-       }
-       else
-       {
-         break;
-       }
-     }
-     else // normal piece movment
-     {
-      if(board->tiles[(board->width * (y+(i))) + (x+0)].g_id == 0)// if empty add to possible moves
-      {
-        result[pointer_pos] = ((board->width *(y+(i))) + (x+0)) + 1;
-        pointer_pos++;
-        continue;
-      
-      }
-      else
-      {
-        if((j_no_take !=0) )
-        {
-           int meta_len =0;
-           if(j_no_take == 1)
-           {
-//             *result[pointer_pos] = slide_ortho(board, x, y-(i+1), side, 1, 0, 1, &meta_len); // getting cannon pos up
-             int * copy_array = (int *) malloc(10*sizeof(int));
-               copy_array = slide_ortho(board, (x+0) , y+(i), side , 1, 0, 1, &meta_len); 
-             for(int j =0; j < meta_len; j++)
-             {
-               result[pointer_pos+j] = copy_array[j];
-
-             }
-             pointer_pos += meta_len;
-           }
-           if(j_no_take == 2)
-           {
-             //for the diagonal checks... i dont think any pieces actually do that, however, if they do, wouldent that be cool.
-           }
-           break;
- 
-         }
-         else
-         {
-           // not a cannon or something cannon like
-           if(board->tiles[(board->width * y+(i)) + (x+0)].side != side)
-           {
-             result[pointer_pos] = ((board->width *(y+(i))) + (x+0)) + 1;
+             result[pointer_pos] = ((board->width *(y+(m))) + (x+(n))) + 1;
              pointer_pos++;
              break;
            }
@@ -385,6 +195,8 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
  return result;
  
 }
+
+
 
 
 
