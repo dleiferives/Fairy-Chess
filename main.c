@@ -85,8 +85,9 @@ int *slide_ortho(s_ptrb board, int x, int y, int side, int take_last, int j_no_t
  int down = board->height - y;
  int left = x;
  int right = board->width - x;
-need to fix the direction array 
- int *direction_arr = {up,down,left,right}; 
+ 
+ int *direction_arr = (int *) malloc( 4*sizeof(int));
+ direction_arr =(int[]){up,down,left,right}; 
  
  len[0] = (take_last == 1) ? 4 : (up+down+left+right);
  len[0] += (j_no_take == 0) ? 0 : 16;
@@ -105,7 +106,8 @@ if(direction ==0)
 }
 else
 {
-
+  start =direction;
+  end = direction;
 }
 
 
@@ -124,7 +126,7 @@ else
      {
 
        if(board->tiles[(board->width * (y+(m))) + (x+(n))].g_id == 0) continue;
-       if(board->tiles[(board->width * (y+(m))) + (x+(n))].side != side)
+       if(board->tiles[(board->width * (y+(m))) + (x+(n))].side != side) // can make branchless *but* will take a bit of effort
        {
         result[pointer_pos] = ((board->width *(y+(m) )) + (x+(n))) + 1;
         pointer_pos++;
