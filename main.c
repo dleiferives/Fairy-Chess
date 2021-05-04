@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> // memcopy, should probably implement my own version though.
+#include <time.h> // used for benchmarking program
+
 
 #define MIN(a,b) ((a >b) ? b : a)
+#define DEBUG 0
 
 
 //lets start with the board render
@@ -110,42 +113,59 @@ else
   end = direction;
 }
 
-
+//varibles for looped direction
+int v_m, v_n, v_o, m, n;
 
  for(int v_direction =start; v_direction <= end; v_direction++)
  {
-   int v_m = !(v_direction > 2);
-   int v_n = !(v_m);
-   int v_o = 1-(2*(direction %2));
+   v_m = !(v_direction > 2);
+   v_n = !(v_m);
+   v_o = 1-(2*(v_direction %2));
 
    for(int i =1; i <= direction_arr[v_direction-1]; i++)
    {
+
      int m =v_m*i*v_o;
      int n =v_n*i*v_o;
+     //       # m  n o
+     // up    1 i  0 -1
+     // down  2 i  0 1
+     // left  3 0  i -1
+     // right 4 0  i 0
+     //
+     
+    if(DEBUG) printf("\ndirection: %i,%i i: %i M: %i N: %i X: %i Y: %i p_pos: %i g_id: %i jnt: %i take_last: %i O: %i",direction,v_direction,i,m,n,(x+(n)),(y+(m)),pointer_pos,board->tiles[(board->width * (y+(m))) + (x+(n))].g_id,j_no_take,take_last,v_o);
+
      if(take_last ==1)
      {
 
        if(board->tiles[(board->width * (y+(m))) + (x+(n))].g_id == 0) continue;
-       if(board->tiles[(board->width * (y+(m))) + (x+(n))].side != side) // can make branchless *but* will take a bit of effort
-       {
-        result[pointer_pos] = ((board->width *(y+(m) )) + (x+(n))) + 1;
-        pointer_pos++;
+
+       { // even smaller local scope, so that declared variable will get cleared from memory
+        int b_less = (board->tiles[(board->width * (y+(m))) + (x+(n))].side != side); // b_less = branchless.... idk, i needed a name 
+       
+        //if the piece is on the same side, it points to 0, which does not get called, if it is on the other, writes the adress
+        result[pointer_pos] = (((board->width *(y+(m) )) + (x+(n))) + 1) *b_less; 
+        // does not iterate pointer_pos, if nothing has changed, so we are chilling. To be safer? (not positive) might want to make it iterate anyways
+        pointer_pos += b_less; 
         break;
-       }
-       else
-       {
-         break;
        }
      }
      else // normal piece movment
      {
-      if(board->tiles[(board->width * (y+(m))) + (x+(n))].g_id == 0)// if empty add to possible moves
+
+      int b_less = (board->tiles[(board->width * (y+(m))) + (x+(n))].g_id == 0);// if empty add to possible moves
       {
-        result[pointer_pos] = ((board->width *(y+(m))) + (x+(n))) + 1;
-        pointer_pos++;
-        continue;
+      result[pointer_pos] = (((board->width *(y+(m))) + (x+(n))) + 1) * b_less;
+      pointer_pos++;
+      
+      // by making it branchless removes this continue, and I think it might actually faster to have this continue than to have branchless...
       
       }
+      if(b_less == 1)
+      {
+
+      } 
       else
       {
         if((j_no_take !=0) )
@@ -178,9 +198,6 @@ else
              result[pointer_pos] = ((board->width *(y+(m))) + (x+(n))) + 1;
              pointer_pos++;
              break;
-           }
-           else // don't take same sides peice
-           {
            }
          }
        }
@@ -220,12 +237,11 @@ int check_move(s_ptrb board, piece p, int pos, int t_pos)
   for( int i =0; i < len; i++)
   {
     if(array[i] == 0) continue;
-   // printf("\n %i %i", array[i]-1, i); // can be used to print out the positions stuff tries to move t0
-    //board->tiles[array[i]-1].type = '#';
+    //printf("\n %i %i", array[i]-1, i); // can be used to print out the positions stuff tries to move t0
+    board->tiles[array[i]-1].type = '#';
     if(t_pos == array[i]-1)
     {
       move_piece(board, pos, t_pos); 
-      puts("pogchamp");
       return 1;
     }
   }
@@ -280,9 +296,16 @@ int main()
   board.tiles[26].g_id = 2;
 
   put_board(board.tiles, board.width, board.height);
-  printf(" %i \n", check_move(&board, board.tiles[21], 21, 26));
+
+  clock_t begin = clock();
+  printf("\n check_move: %i \n\n", check_move(&board, board.tiles[21], 21, 26));
+  clock_t end = clock();
+  
+  double time_spent = 1000*(double)(end-begin) / CLOCKS_PER_SEC;
 
   put_board(board.tiles, board.width, board.height);
+
+  printf("\nexecution time: %f ",time_spent);
 
   return 0;
 }
